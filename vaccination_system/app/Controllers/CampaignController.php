@@ -2,19 +2,26 @@
 namespace App\Controllers;
 
 use App\Models\CampaignModel;
+use CodeIgniter\Controller;
 
+ 
 class CampaignController extends BaseController
 {
 
     protected $db;
     protected $session;
     protected $userModel;
+   // protected $campaignModel;
+
 
     public function __construct()
     {
         try {
             $this->db = \Config\Database::connect(); // Ensure database connection is working
             $this->session = \Config\Services::session();
+          //  $this->campaignModel = new CampaignModel(); // Correct way to load a model in CI4
+
+ 
          } catch (\Exception $e) {
             // Log and display the error
             log_message('error', $e->getMessage());
@@ -29,14 +36,23 @@ class CampaignController extends BaseController
             return redirect()->to("/login");
         }
         try {
-            $model = new CampaignModel();
-            $campaigns = $model->findAll();
-
-            // Debugging: Print the data to verify it's fetched correctly
+            error_reporting(-1);
+ini_set('display_errors', '1');
 
 
+$campaignModel = new \App\Models\CampaignModel();
+$data['campaigns']  = $campaignModel->getCampaigns(); 
 
-            return view('compaign', ['campaigns' => $campaigns]);
+
+            $data['coveragebyloc'] = $campaignModel->getCoverageByLocation(); 
+
+            $data['coverageMissing'] = $campaignModel->getCoveragemissing(); 
+
+//           echo $this->db->getLastQuery(); // Display the last executed query
+//           print_r($campaigns);
+//   exit;
+
+            return view('compaign', $data);
         } catch (\Exception $e) {
             // Log the exception for troubleshooting
             log_message('error', $e->getMessage());

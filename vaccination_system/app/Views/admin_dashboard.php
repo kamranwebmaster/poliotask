@@ -10,6 +10,9 @@
     <div class="container mt-5">
         <h2>Admin Dashboard</h2>
         <a href="<?= site_url('CampaignController/createCampaign') ?>" class="btn btn-success mb-3">Create New Campaign</a>
+
+        <a href="<?= site_url('logout') ?>" class="btn btn-success mb-3">logout</a>
+
         <table class="table table-bordered">
             <thead>
                 <tr>
